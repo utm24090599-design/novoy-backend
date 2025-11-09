@@ -13,15 +13,15 @@
             decimal cobro = 0;
             if (persona.Edad < 16)
             {
-                cobro = 0;
+                cobro = 20;
             }
             else if (persona.Edad > 60)
             {
-                cobro = 0;
+                cobro = 20;
             }
             else if (persona.EsEstudiante)
             {
-                cobro = 0;
+                cobro = 50;
             }
             else
             {
