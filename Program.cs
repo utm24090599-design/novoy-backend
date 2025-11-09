@@ -17,7 +17,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:5173") // origen del frontend
+        policy.WithOrigins("http://localhost:5173", "https://novoy-frontend-j6pyulsgg-utm24090599-designs-projects.vercel.app") // origen del frontend
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
