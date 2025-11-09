@@ -1,0 +1,60 @@
+graph TD
+    A[Inicio: Usuario hace petición HTTP] --> B{Tipo de Endpoint}
+    
+    B -->|GET /BusStopGn| C[BusStopGnController]
+    B -->|GET /BusStopGn/GetBusStop| C2[BusStopGnController]
+    B -->|GET /BusStopGn/GetClassifiedPeople| C3[BusStopGnController]
+    B -->|GET /People/GetPeople| D[PeopleController]
+    B -->|GET /GetBuses| E[BusController]
+    B -->|GET /GetPrices| F[PriceController]
+    
+    C --> C0[Constructor ya calculó valores]
+    C0 --> C1[Leer _peopleIn del constructor]
+    C1 --> C1A[Leer _students del constructor]
+    C1A --> C1B[Leer _children del constructor]
+    C1B --> C1C[Leer _old del constructor]
+    C1C --> C1D[Leer _others del constructor]
+    C1D --> C7[Crear objeto BusStopGn completo]
+    C7 --> G[Retornar JSON 200 OK]
+    
+    C2 --> C2A[Leer solo _peopleIn]
+    C2A --> C2B[Crear BusStopGn simple]
+    C2B --> G
+    
+    C3 --> C3A[Consultar BD: People]
+    C3A --> C3B{¿Hay personas?}
+    C3B -->|No| C3C[Retornar 404]
+    C3B -->|Sí| C3D[Generar total aleatorio 1-80]
+    C3D --> C3E[Calcular porcentajes]
+    C3E --> C3F{¿Suma > 100%?}
+    C3F -->|Sí| C3G[Normalizar porcentajes]
+    C3F -->|No| C3H[Usar directos]
+    C3G --> C3I[Loop: generar personas]
+    C3H --> C3I
+    C3I --> C3J[Clasificar por edad]
+    C3J --> C3K[Crear PersonWithCategoryDto]
+    C3K --> G
+    
+    D --> D1[Consultar tabla person en BD]
+    D1 --> D2[Mapear a DTO]
+    D2 --> D3[Incluir contador total]
+    D3 --> G
+    
+    E --> E1[Consultar tabla bus en BD]
+    E1 --> E2[Seleccionar campos necesarios]
+    E2 --> E3[Convertir a lista]
+    E3 --> G
+    
+    F --> F1[Consultar tabla price en BD]
+    F1 --> F2[Obtener todas las tarifas]
+    F2 --> F3[Mapear a modelo Price]
+    F3 --> G
+    
+    G --> H[Cliente recibe respuesta]
+    
+    style C fill:#e1f5ff
+    style D fill:#e1f5ff
+    style E fill:#e1f5ff
+    style F fill:#e1f5ff
+    style G fill:#d4edda
+    style H fill:#fff3cd
