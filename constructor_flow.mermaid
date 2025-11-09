@@ -1,0 +1,67 @@
+graph TD
+    A[Nueva petición HTTP a BusStopGnController] --> B[ASP.NET Core crea nueva instancia]
+    B --> C[Ejecutar Constructor]
+    
+    C --> D[Inyectar AppDbContext]
+    D --> E[Crear instancia Random]
+    
+    E --> F[Generar _peopleIn = Random 1-80]
+    F --> G[Definir límites máximos]
+    
+    G --> G1[maxStudents = 0.2 - 20%]
+    G1 --> G2[maxChildren = 0.1 - 10%]
+    G2 --> G3[maxOld = 0.35 - 35%]
+    
+    G3 --> H[Generar porcentajes aleatorios]
+    H --> H1[_percentStudents = Random × 0.2]
+    H1 --> H2[_percentChildren = Random × 0.1]
+    H2 --> H3[_percentOld = Random × 0.35]
+    
+    H3 --> I[Sumar porcentajes]
+    I --> I1[totalPercent = suma de los 3]
+    
+    I1 --> J{¿totalPercent > 1.0?}
+    
+    J -->|SÍ - Excede 100%| K[Calcular factor normalización]
+    K --> K1[factor = 1.0 / totalPercent]
+    K1 --> K2[_percentStudents *= factor]
+    K2 --> K3[_percentChildren *= factor]
+    K3 --> K4[_percentOld *= factor]
+    K4 --> L[Calcular _percentAnyPerson]
+    
+    J -->|NO - Dentro del límite| L
+    
+    L --> L1[_percentAnyPerson = 1.0 - suma otros %]
+    
+    L1 --> M[Calcular cantidades enteras]
+    M --> M1[_students = Floor - _percentStudents × _peopleIn]
+    M1 --> M2[_children = Floor - _percentChildren × _peopleIn]
+    M2 --> M3[_old = Floor - _percentOld × _peopleIn]
+    M3 --> M4[_others = _peopleIn - suma anteriores]
+    
+    M4 --> N[Constructor finalizado]
+    N --> O[Valores almacenados en campos privados]
+    
+    O --> P{Método HTTP invocado}
+    
+    P -->|GenerateBusStop| Q[Leer todos los campos]
+    P -->|GetBusStop| R[Leer solo _peopleIn]
+    
+    Q --> S[Crear BusStopGn con todos los valores]
+    R --> T[Crear BusStopGn solo con total]
+    
+    S --> U[Retornar JSON]
+    T --> U
+    
+    U --> V[Respuesta al cliente]
+    V --> W[Instancia destruida por GC]
+    
+    style A fill:#e3f2fd
+    style C fill:#fff3e0
+    style J fill:#fff9c4
+    style K fill:#ffccbc
+    style N fill:#c8e6c9
+    style O fill:#c8e6c9
+    style P fill:#f3e5f5
+    style U fill:#e8f5e9
+    style W fill:#ffcdd2

@@ -1,0 +1,68 @@
+sequenceDiagram
+    actor Usuario
+    participant FE as Frontend<br/>(React)
+    participant API as ASP.NET Core<br/>API
+    participant CORS as CORS<br/>Middleware
+    participant DI as Dependency<br/>Injection
+    participant Ctor as Constructor<br/>BusStopGn
+    participant Ctrl as Controller<br/>Method
+    participant Logic as Business<br/>Logic
+    participant EF as Entity<br/>Framework
+    participant DB as PostgreSQL<br/>Database
+    
+    Usuario->>FE: Solicita datos de parada
+    activate FE
+    
+    FE->>API: GET /BusStopGn
+    activate API
+    
+    API->>CORS: Verificar origen
+    activate CORS
+    CORS->>CORS: Validar localhost:5173
+    CORS-->>API: ✓ Origen permitido
+    deactivate CORS
+    
+    API->>DI: Crear instancia Controller
+    activate DI
+    DI->>Ctor: new BusStopGnController(context)
+    activate Ctor
+    
+    Note over Ctor: CÁLCULOS EN CONSTRUCTOR
+    Ctor->>Ctor: _peopleIn = Random(1,81)
+    Ctor->>Ctor: Generar % aleatorios
+    Ctor->>Ctor: ¿Suma > 100%?
+    Ctor->>Ctor: Normalizar si necesario
+    Ctor->>Ctor: Calcular cantidades
+    Ctor->>Ctor: _students, _children, _old, _others
+    
+    Ctor-->>DI: Instancia con valores calculados
+    deactivate Ctor
+    DI-->>API: Controller listo
+    deactivate DI
+    
+    API->>Ctrl: GenerateBusStop()
+    activate Ctrl
+    
+    Ctrl->>Ctrl: Leer _peopleIn (ya calculado)
+    Ctrl->>Ctrl: Leer _students (ya calculado)
+    Ctrl->>Ctrl: Leer _children (ya calculado)
+    Ctrl->>Ctrl: Leer _old (ya calculado)
+    Ctrl->>Ctrl: Leer _others (ya calculado)
+    
+    Ctrl->>Ctrl: new BusStopGn { ... }
+    Ctrl-->>API: Ok(200) + BusStopGn
+    deactivate Ctrl
+    
+    API-->>FE: JSON Response
+    deactivate API
+    
+    FE->>FE: Parsear JSON
+    FE->>FE: Actualizar UI
+    FE-->>Usuario: Mostrar parada generada
+    deactivate FE
+    
+    Note over Usuario,DB: Los cálculos se hicieron en Constructor<br/>El método HTTP solo lee y retorna
+    
+    rect rgb(255, 243, 224)
+    Note over Ctor: IMPORTANTE: Cálculos aquí<br/>NO en el método HTTP
+    end
